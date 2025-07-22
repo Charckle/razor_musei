@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+
+
+    <!-- Bootstrap CSS -->
+    <link href="{{ url_for('static', filename='main_page_module/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main_page_module/icons/bootstrap_icons/bootstrap-icons.min.css') }}">
+    
+    <script src="{{ url_for('static', filename='main_page_module/jquerry/jquery-3.5.1.min.js') }}"></script>
+
+
+    {% block extraheader %}
+    {% endblock extraheader %}
+
+    <title>{{ config['APP_NAME'] }}</title>
+  </head>
+
+    
+  <body>
+    <header class="p-3 text-bg-dark">
+      <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <img src="{{ url_for('static', filename='coat_of_arms_zubin.svg') }}" class="img-fluid" alt="..." style="max-width: 50px;" >
+          </a>
+  
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="{{ url_for('main_page_module.index') }}" class="nav-link px-2 {% block nav_index %}text-white{% endblock nav_index %}"><i class="bi bi-house"></i> Domov</a></li>
+            <li><a href="{{ url_for('main_page_module.artifacts', type_='not_coin') }}" class="nav-link px-2 {% block nav_artfs %}text-white{% endblock nav_artfs %}"><i class="bi bi-bookmark-star-fill"></i> Artifakti</a></li>
+            <li><a href="{{ url_for('main_page_module.artifacts', type_='coin') }}" class="nav-link px-2 {% block nav_kovanci %}text-white{% endblock nav_kovanci %}"><i class="bi bi-coin"></i> Kovanci</a></li>
+            <li><a href="{{ url_for('main_page_module.artifacts', type_='coin') }}" class="nav-link px-2 {% block nav_vse %}text-white{% endblock nav_vse %}"><i class="bi bi-ui-radios"></i> Vse</a></li>
+            <li><a href="{{ url_for('main_page_module.about') }}" class="nav-link px-2 {% block nav_about %}text-white{% endblock nav_about %}"><i class="bi bi-info-square"></i> O zbirki</a></li>
+          </ul>
+          
+          <div class="text-end d-flex align-items-center">
+            <!-- Login Button -->
+            {% if session['user_id'] %}<a type="button" class="btn btn-outline-light me-2" href="{{ url_for('main_page_module.logout') }}">Logout</a>{% endif %}
+        </div>
+        </div>
+      </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div>
+          {% for category, message in messages %}
+            {% if category == "error" %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% else %}
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+
+    <br>
+    <hr>
+    <footer class="footer mt-auto py-3 bg-body-tertiary text-center">
+      <div class="container">
+        <span class="text-body-secondary">2025 - <script>document.write(new Date().getFullYear())</script> &trade; <a href="{{ url_for('main_page_module.login') }}">{{ config['APP_NAME'] }}</a></span>
+      </div>
+    </footer>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Bootstrap JS -->
+    <script src="{{ url_for('static', filename='main_page_module/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+
+  </body>
+</html>

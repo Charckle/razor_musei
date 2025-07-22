@@ -1,0 +1,175 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+{% endblock extraheader  %}
+
+{% block nav_freist %}text-secondary{% endblock nav_freist %}
+
+{% macro render_field(field, placeholder=None) %}
+  <div class="mb-3">
+      {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+
+      {{ field.label }}
+
+      {% if field.errors %}
+          {% set css_class = css_class + ' is-invalid' %}
+
+          {% for error in field.errors %}
+              
+              <small id="{{ field.label.text }}" class="text-danger">
+                  {{ error }}
+            </small>
+
+          {% endfor %}
+          </ul>
+      {% endif %}
+
+      {{ field(class=css_class, autocomplete="off", placeholder=placeholder, **kwargs) }}
+  </div>
+{% endmacro %}
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="">Vsi Artifakti</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Nov Artifakt</li>
+          </ol>
+        </nav>
+        
+    <div class="row">
+      <div class="col-sm-2">
+        
+      </div>
+      
+      
+      <div class="col-sm-8">
+
+        <form method="POST" action="{{ url_for('main_page_module.artifacts_new') }}" accept-charset="UTF-8" role="form" enctype="multipart/form-data">
+          {{ form.csrf_token }}
+
+          <input type="hidden" id="col_ref_num" name="col_ref_num" value="999">
+  
+          {{ render_field(form.name, placeholder="Ime artifakta",
+          autofocus="") }}
+
+          
+
+          <div class="row">
+            <div class="col-sm-3">
+              {{ render_field(form.type_, class="form-select") }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.period, class="form-select") }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.state_entity) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.replica) }}
+            </div>
+          </div>
+          
+          
+          <div class="row">
+            <div class="col-sm-3">
+              {{ render_field(form.buy_price) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.sold_price) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.joined_collection_in_year) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.left_collection_in_year) }}
+            </div>
+          </div>
+          
+          
+          
+          <div class="row">
+            <div class="col-sm-3">
+              {{ render_field(form.public) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.curr_location_of_item) }}
+            </div>
+            <div class="col-sm-6">
+            {{ render_field(form.reference) }}
+            </div>
+          </div>
+          
+          {{ render_field(form.provenance_notes) }}
+          {{ render_field(form.owners) }}
+          {{ render_field(form.description) }}
+          {{ render_field(form.historical_context) }}
+
+          <div id="coins_block">
+          
+            <div class="row">
+              <div class="col-sm-3">
+                {{ render_field(form.coin_type) }}
+              </div>
+              <div class="col-sm-3">
+                {{ render_field(form.ruler) }}
+              </div>
+              <div class="col-sm-3">
+              {{ render_field(form.mint_city) }}
+              </div>
+              <div class="col-sm-3">
+              {{ render_field(form.mint_period) }}
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-sm-3">
+                {{ render_field(form.material) }}
+              </div>
+              <div class="col-sm-3">
+                {{ render_field(form.weight) }}
+              </div>
+              <div class="col-sm-3">
+              {{ render_field(form.diameter) }}
+              </div>
+              <div class="col-sm-3">
+              {{ render_field(form.grade, class="form-select") }}
+              </div>
+            </div>
+            
+            {{ render_field(form.coin_description) }}
+            {{ render_field(form.obverse) }}
+            {{ render_field(form.reverse) }}
+
+          </div>
+
+          
+          
+
+         
+
+          {{ form.submit(class="form-control btn btn-dark mb-2", value="Ustvari") }}
+
+
+        </form>
+
+      </div>
+
+
+        
+      <div class="col-sm-2">
+
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}

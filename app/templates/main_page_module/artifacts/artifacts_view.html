@@ -1,0 +1,286 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+{% endblock extraheader  %}
+
+{% block nav_freist %}text-secondary{% endblock nav_freist %}
+
+{% macro render_field(field, placeholder=None) %}
+  <div class="mb-3">
+      {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+
+      {{ field.label }}
+
+      {% if field.errors %}
+          {% set css_class = css_class + ' is-invalid' %}
+
+          {% for error in field.errors %}
+              
+              <small id="{{ field.label.text }}" class="text-danger">
+                  {{ error }}
+            </small>
+
+          {% endfor %}
+          </ul>
+      {% endif %}
+
+      {{ field(class=css_class, autocomplete="off", placeholder=placeholder, **kwargs) }}
+  </div>
+{% endmacro %}
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.artifacts') }}">Vsi Artifakti</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Artifakt <span class="badge text-bg-dark">{{artifact["col_ref_num"]}}</span></li>
+          </ol>
+        </nav>
+        
+    <div class="row">
+      <div class="col-sm-1">
+        <a class="btn btn-outline-primary" href="{{ url_for('main_page_module.artifacts_edit', col_ref_num=artifact['col_ref_num']) }}" role="button">Uredi</a>
+      </div>
+      
+      
+      
+      
+      <div class="col-sm-10">              
+        <div class="row">
+          <div class="col-sm-6">
+
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th scope="row">Ime</th>
+                  <td><b> {{artifact["name"]}}</b> {% if artifact["left_collection_in_year"] != 0 %}<span class="badge text-bg-danger"><i class="bi bi-door-open"></i></span>{% endif %}
+                  {% if artifact["left_collection_in_year"] != 0 %}Artifakt ni več v zbirki.{% endif %}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Identifikacijska številka</th>
+                  <td><span class="badge text-bg-dark">{{artifact["col_ref_num"]}}</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Tip</th>
+                  <td><span class="badge text-bg-light">{{ Artifact.types(artifact["type_"]) }}</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Obdobje</th>
+                  <td><span class="badge text-bg-warning">{{ Artifact.periods(artifact["period"])}}</span></td>
+                </tr>
+                <tr>
+                  <th scope="row">Politicna Entiteta</th>
+                  <td>{{artifact["state_entity"]}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Replika</th>
+                  <td>{% if artifact["replica"] == "1" %}<span class="badge text-bg-danger"><i class="bi bi-shield-exclamation"></i></span>{% else %}{% endif %} {{ Artifact.yes_no(artifact["replica"]) }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Cena ob nakupu</th>
+                  <td>{{artifact["buy_price"]}} €</td>
+                </tr>
+                <tr>
+                  <th scope="row">Cena ob prodaji</th>
+                  <td>{{artifact["sold_price"]}} €</td>
+                </tr>
+                <tr>
+                  <th scope="row">Leto prejema v kolekcijo</th>
+                  <td>{{artifact["joined_collection_in_year"]}} <i class="bi bi-calendar-date"></i></td>
+                </tr>
+                <tr>
+                  <th scope="row">Leto oddaje iz kolekcije</th>
+                  <td> {{ artifact["left_collection_in_year"] }} <i class="bi bi-calendar-date"></i> {% if artifact["left_collection_in_year"] != 0 %}<span class="badge text-bg-danger"><i class="bi bi-door-open"></i></span>{% endif %}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Javno vidno</th>
+                  <td>{% if artifact["public"] == "1" %}<i class="bi bi-check-circle"></i>{% else %}<i class="bi bi-x-circle"></i> <i class="bi bi-incognito"></i>{% endif %} {{ Artifact.yes_no(artifact["public"]) }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Trenutna lokacija artifakta</th>
+                  <td>{{artifact["curr_location_of_item"]}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Reference</th>
+                  <td>{{artifact["reference"]}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+          <div class="col-sm-6">
+
+            <div id="carouselExample" class="carousel slide">
+              <div class="carousel-inner">
+                {% set images, count = artifact.get_images() %}
+                {% if images|length == 0 %}
+                  <div class="carousel-item active">
+                  <img src="{{ url_for('static', filename='artifacts/placeholder_vector.svg') }}" class="d-block w-100" alt="...">
+                </div>
+                {% else %}
+                  {% for image in images %}
+                    <div class="carousel-item active">
+                      <img src="{{ url_for('static', filename='artifacts/images/'+image) }}" class="d-block w-100" alt="...">
+                    </div>
+                  {% endfor %}
+                {% endif %}
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            
+          </div>
+        </div>
+
+        <hr>
+
+        
+
+
+        <div class="card border-dark mb-3">
+          <div class="card-header">Opombe o izvoru</div>
+          <div class="card-body">
+            <p class="card-text">{{artifact["provenance_notes"]}}</p>
+          </div>
+        </div>
+
+        <div class="card border-dark mb-3">
+          <div class="card-header">Lastniki</div>
+          <div class="card-body">
+            <p class="card-text">{{artifact["owners"]}}</p>
+          </div>
+        </div>
+
+        <div class="card border-dark mb-3">
+          <div class="card-header">Opis</div>
+          <div class="card-body">
+            <p class="card-text">{{artifact["description"]}}</p>
+          </div>
+        </div>
+
+
+        <div class="card border-dark mb-3">
+          <div class="card-header">Zgodovinski kontekts</div>
+          <div class="card-body">
+            <p class="card-text">{{artifact["historical_context"]}}</p>
+          </div>
+        </div>
+        
+        <div id="coins_block">
+
+          <div class="row">
+          <div class="col-sm-6">
+
+            <table class="table">
+            <tbody>
+              <tr>
+                <th scope="row">Tip kovanca</th>
+                <td><span class="badge text-bg-light">{{artifact["coin_type"]}}</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Vladar, pod katerim je bila kovanec izdan</th>
+                <td>{{artifact["ruler"]}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Mesto kovnice</th>
+                <td><span class="badge text-bg-warning">{{artifact["mint_city"]}}</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Leto/obdobje kovanja</th>
+                <td>{{artifact["mint_period"]}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Material</th>
+                <td>{{artifact["material"]}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Teza</th>
+                <td><span class="badge text-bg-secondary">{{artifact["weight"]}}</span> g</td>
+              </tr>
+              <tr>
+                <th scope="row">Premer</th>
+                <td><span class="badge text-bg-secondary">{{artifact["diameter"]}}</span> mm</td>
+              </tr>
+              <tr>
+                <th scope="row">Ocena Stanja</th>
+                <td><span class="badge text-bg-success">{{ Artifact.grades(artifact["grade"])}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          </div>
+
+          <div class="col-sm-6">
+            <div class="card text-bg-dark mb-3">
+              <div class="card-header">Opis kovanca</div>
+              <div class="card-body">
+                <p class="card-text">{{artifact["coin_description"]}}</p>
+              </div>
+            </div>
+            
+            <div class="card text-bg-secondary mb-3">
+              <div class="card-header">Obverse - Lice</div>
+              <div class="card-body">
+                <p class="card-text">{{artifact["obverse"]}}</p>
+              </div>
+            </div>
+
+            <div class="card text-bg-secondary mb-3">
+              <div class="card-header">Reverse - Hrbet</div>
+              <div class="card-body">
+                <p class="card-text">{{artifact["reverse"]}}</p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+          
+          
+          
+          
+        </div>
+      
+       
+
+      </div>
+
+
+
+        
+      <div class="col-sm-1">
+
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const block = document.getElementById('coins_block');
+    const value = "{{ artifact['type_'] }}";
+    if (value != "coin") {
+      block.style.display = 'none';
+    } else {
+      block.style.display = 'block';
+    }
+  });
+
+</script>
+
+{% endblock content %}

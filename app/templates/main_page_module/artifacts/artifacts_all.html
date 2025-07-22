@@ -1,0 +1,90 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet">
+
+{% endblock extraheader  %}
+
+{% block nav_freist %}text-secondary{% endblock nav_freist %}
+
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="">Vsi Artifakti</a></li>
+      </ol>
+    </nav>
+    
+    <div class="row">
+      <div class="col-sm-1">
+
+      </div>
+      
+      
+      <div class="col-sm-7">
+        <legend>Artifakti</legend> 
+        
+        <table id="artifacts_table" class="table table-bordered" style="width:100%">
+          <thead>
+              <tr>
+                  <th>Naziv</th>
+                  <th>Tip</th>
+                  <th>Politicna Entiteta</th>
+                  <th>Replika</th>
+                  <th>*</th>
+                  <th>*</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for col_ref_num, data in Artifact.get_all(type_).items() %}
+            {% set artifact = Artifact(data) %}
+              <tr>
+                  <td>{{ artifact.name }}</td>
+                  <td><span class="badge text-bg-light">{{ Artifact.types(artifact.type_) }}</span></td>
+                  <td>{{ artifact.state_entity }}</td>
+                  <td>{% if artifact["replica"] == "1" %}<span class="badge text-bg-danger"><i class="bi bi-shield-exclamation"></i></span>{% else %}{% endif %} {{ Artifact.yes_no(artifact["replica"]) }}</td>
+                  <td>{% if artifact["public"] == "1" %}<i class="bi bi-check-circle"></i>{% else %}<i class="bi bi-x-circle"></i> <i class="bi bi-incognito"></i>{% endif %} {{ Artifact.yes_no(artifact["public"]) }}</td>
+                  <td><a class="btn btn-outline-primary" href="{{ url_for('main_page_module.artifacts_view', col_ref_num=artifact.col_ref_num) }}" role="button">Preglej</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+      </div>
+
+
+        
+      <div class="col-sm-4">
+        <img src="{{ url_for('static', filename='main_page_module/segment_images/freis_info.jpgGGGGG') }}" class="img-fluid" alt="...">
+        <hr>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+        <hr>
+        <div class="d-grid gap-2">
+          <div class="btn-group" role="group">
+            {% if session['user_id'] %}<a class="btn btn-primary" href="{{ url_for('main_page_module.artifacts_new') }}" role="button">Dodaj nov artifakt</a>{% endif %}
+            {% if session['user_id'] %}<a class="btn btn-success" href="{{ url_for('main_page_module.export_artifacts') }}" role="button"><i class="bi bi-filetype-xlsx"></i> Excel</a>{% endif %}
+          </div>
+        </div>
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
+  <script>
+    let table = new DataTable('#artifacts_table');
+  </script>
+
+{% endblock content %}

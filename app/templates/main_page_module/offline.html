@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fade In SVG</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: black;
+      overflow: hidden;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      opacity: 1;
+      transition: opacity 5s ease-in-out;
+      z-index: 10;
+    }
+
+    #svg-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+    }
+
+    svg {
+      width: 150px;
+      height: 150px;
+      fill: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG in the center -->
+  <div id="svg-container">
+    <img src="{{ url_for('static', filename='coat_of_arms_zubin.svg') }}" alt="SVG Image" width="450" height="450">
+  </div>
+
+
+
+  <!-- Dark overlay that fades out -->
+  <div id="overlay"></div>
+
+  <script>
+      window.addEventListener('load', () => {
+    const overlay = document.getElementById('overlay');
+
+    setTimeout(() => {
+      // Start the fade-out
+      overlay.style.opacity = 0;
+
+      // After the transition ends, remove the overlay from the DOM
+      overlay.addEventListener('transitionend', () => {
+        overlay.remove();
+      });
+    }, 1000);
+
+    setTimeout(() => {
+      window.location.href = "{{ url_for('main_page_module.index') }}"; // 🔁 Change this URL
+    }, 10000); // 10,000 ms = 10 seconds
+
+  });
+  </script>
+
+</body>
+</html>

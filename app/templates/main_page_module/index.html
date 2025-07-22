@@ -1,0 +1,63 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+{% endblock extraheader  %}
+
+{% block nav_index %}text-secondary{% endblock nav_index %}
+
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+
+      </div>
+      <div class="col-sm-8">
+        <legend>Izbrani Artifakti</legend> 
+
+      
+      
+
+
+          {% for col_ref_num, data in Artifact.get_all("all", 20, True).items() %}
+            {% set artifact = Artifact(data) %}
+
+            {% set images, count = artifact.get_images() %}
+              <div class="col-sm-4">
+
+                <div class="card">
+                  {% if images|length == 0 %}
+                    <img src="{{ url_for('static', filename='artifacts/placeholder_vector.svg') }}" class="card-img-top" alt="...">
+                  {% else %}
+                    <img src="{{ url_for('static', filename='artifacts/images/'+images[0]) }}" class="card-img-top" alt="...">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{ artifact.name }}</h5>
+                    <p class="card-text">{{ artifact.description[:250] }}...</p>
+                    <div class="d-grid gap-2">
+                      <a href="{{ url_for('main_page_module.artifacts_view', col_ref_num=artifact.col_ref_num) }}" class="btn btn-outline-dark">Pregled</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          {% endfor %}
+
+      </div>
+
+
+        
+      <div class="col-sm-2">
+
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}

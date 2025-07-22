@@ -1,0 +1,66 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+{% endblock extraheader  %}
+
+{% block nav_about %}text-secondary{% endblock nav_about %}
+
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    <div class="row">
+      <div class="col-sm-2">
+
+      </div>
+      
+      
+      <!-- START inner -->
+      <div class="col-sm-8">
+
+        <div class="row">
+          <div class="col-sm-6">
+            <img src="{{ url_for('static', filename='coat_of_arms_zubin.svg') }}" class="img-fluid" alt="...">
+          </div>
+          <div class="col-sm-6">
+            <h2>O Zbirki</h2>
+            <hr>
+            <p>Privatna zbirka, ki jo je začel moj nono, jaz pa jo nadaljujem."</p>
+            <hr>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td><i class="bi bi-telephone"></i></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><i class="bi bi-envelope-at"></i></td>
+                  <td><td>
+                </tr>
+                <tr>
+                  <td><i class="bi bi-facebook"></i></td>
+                  <td><a href="">Facebook</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      <!-- END inner -->
+
+
+        
+      <div class="col-sm-2">
+
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}

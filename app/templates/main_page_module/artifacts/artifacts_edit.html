@@ -1,0 +1,199 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+{% endblock extraheader  %}
+
+{% block nav_freist %}text-secondary{% endblock nav_freist %}
+
+{% macro render_field(field, placeholder=None) %}
+  <div class="mb-3">
+      {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+
+      {{ field.label }}
+
+      {% if field.errors %}
+          {% set css_class = css_class + ' is-invalid' %}
+
+          {% for error in field.errors %}
+              
+              <small id="{{ field.label.text }}" class="text-danger">
+                  {{ error }}
+            </small>
+
+          {% endfor %}
+          </ul>
+      {% endif %}
+
+      {{ field(class=css_class, autocomplete="off", placeholder=placeholder, **kwargs) }}
+  </div>
+{% endmacro %}
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.artifacts') }}">Vsi Artifakti</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="{{ url_for('main_page_module.artifacts_view', col_ref_num=form.col_ref_num.data) }}">Artifakt</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Uredi Artifakt {{form.col_ref_num.data}}</li>
+      </ol>
+    </nav>
+        
+    <div class="row">
+      <div class="col-sm-2">
+        
+      </div>
+      
+      
+      <div class="col-sm-8">
+
+        <form method="POST" action="{{ url_for('main_page_module.artifacts_edit') }}" accept-charset="UTF-8" role="form" enctype="multipart/form-data">
+          {{ form.csrf_token }}
+          {{ form.col_ref_num }}
+  
+          
+
+          <div class="row">
+            <div class="col-sm-8">
+              {{ render_field(form.name, placeholder="Ime artifakta", autofocus="") }}
+            </div>
+            <div class="col-sm-4">
+              {{ render_field(form.image) }}
+            </div>
+          </div>
+
+
+          
+          
+
+          <div class="row">
+            <div class="col-sm-3">
+              {{ render_field(form.type_, class="form-select") }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.period, class="form-select") }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.state_entity) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.replica, class="form-select") }}
+            </div>
+          </div>
+          
+          
+          <div class="row">
+            <div class="col-sm-3">
+              {{ render_field(form.buy_price) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.sold_price) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.joined_collection_in_year) }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.left_collection_in_year) }}
+            </div>
+          </div>
+          
+          
+          
+          <div class="row">
+            <div class="col-sm-3">
+              {{ render_field(form.public, class="form-select") }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.curr_location_of_item) }}
+            </div>
+            <div class="col-sm-6">
+            {{ render_field(form.reference) }}
+            </div>
+          </div>
+          
+          {{ render_field(form.provenance_notes) }}
+          {{ render_field(form.owners) }}
+          {{ render_field(form.description) }}
+          {{ render_field(form.historical_context) }}
+
+          <div id="coins_block">
+          
+            <div class="row">
+              <div class="col-sm-3">
+                {{ render_field(form.coin_type) }}
+              </div>
+              <div class="col-sm-3">
+                {{ render_field(form.ruler) }}
+              </div>
+              <div class="col-sm-3">
+              {{ render_field(form.mint_city) }}
+              </div>
+              <div class="col-sm-3">
+              {{ render_field(form.mint_period) }}
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-sm-3">
+                {{ render_field(form.material) }}
+              </div>
+              <div class="col-sm-3">
+                {{ render_field(form.weight) }}
+              </div>
+              <div class="col-sm-3">
+              {{ render_field(form.diameter) }}
+              </div>
+              <div class="col-sm-3">
+              {{ render_field(form.grade, class="form-select") }}
+              </div>
+            </div>
+            
+            {{ render_field(form.coin_description) }}
+            {{ render_field(form.obverse) }}
+            {{ render_field(form.reverse) }}
+
+          </div>
+
+ 
+
+          {{ form.submit(class="form-control btn btn-dark mb-2", value="Uredi") }}
+
+
+        </form>
+
+      </div>
+
+
+        
+      <div class="col-sm-2">
+
+        {% set images, count = artifact.get_images() %}
+        {% if images|length == 0 %}
+          <div class="carousel-item active">
+          <img src="{{ url_for('static', filename='artifacts/placeholder_vector.svg') }}"  class="img-fluid">
+        </div>
+        {% else %}
+          {% for image in images %}
+          <div class="card" style="width: 18rem;">
+            <img src="{{ url_for('static', filename='artifacts/images/'+image) }}"  class="img-fluid">
+            <div class="card-footer">
+              <a href="{{ url_for('main_page_module.artifacts_delete_image', col_ref_num=artifact.col_ref_num, image_name=image) }}" class="btn btn-danger">Izbriši</a>
+            </div>
+          </div>
+          {% endfor %}
+
+        {% endif %}
+
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}
