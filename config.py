@@ -8,8 +8,6 @@ class Config(object):
     TESTING = False
     SECRET_KEY = environ.get('RMUSEI_SECRET_KEY', "B\xb2?.\xdf\x9f\xa7m\xf8\x8a%,\xf7\xc4\xfa\x91")
     
-    JWT_SECRET_KEY = environ.get('RMUSEI_JWT_SECRET_KEY', "sdf34tasdft34")
-    
     APP_NAME = environ.get('RMUSEI_APP_NAME', "Razor Musei")
     
     ONLINE = environ.get('RMUSEI_ONLINE', "1")
@@ -22,7 +20,6 @@ class Config(object):
     SESSION_COOKIE_SECURE = True
     
     APP_LOGGING = environ.get('RMUSEI_APP_LOGGING', "INFO")    
-    SYSTEMAIR_SERVER = environ.get('SYSTEMAIR_SERVER', "127.0.0.1")    
     
     
     
