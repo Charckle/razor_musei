@@ -102,7 +102,8 @@ class Artifact:
         max_num = 0
         
         for col_ref_num, _ in all_artifacts.items():
-            new_num = int(col_ref_num.split("_")[2])
+            print(col_ref_num.split("_"))
+            new_num = int(col_ref_num.split("_")[1])
             
             if new_num >= max_num:
                 max_num = new_num
