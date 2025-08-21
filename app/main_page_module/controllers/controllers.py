@@ -221,7 +221,7 @@ def artifacts_edit(col_ref_num:str=None):
                 artifact.write_image(file_)            
             
             flash('Artifakt uspešno shranjen!', 'success')
-            return redirect(url_for("main_page_module.artifacts_view", col_ref_num=col_ref_num, artifact=artifact))
+            return redirect(url_for("main_page_module.artifacts_view", col_ref_num=col_ref_num))
             
         except Exception as e:
             print(e)
