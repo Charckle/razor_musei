@@ -32,11 +32,12 @@
         <table id="artifacts_table" class="table table-bordered" style="width:100%">
           <thead>
               <tr>
+                  {% if session['user_id'] %}<th>ID</th>{% endif %}
                   <th>Naziv</th>
                   <th>Tip</th>
                   <th>Politicna Entiteta</th>
                   <th>Replika</th>
-                  <th>*</th>
+                  {% if session['user_id'] %}<th>Objavljeno</th>{% endif %}
                   <th>*</th>
               </tr>
           </thead>
@@ -44,11 +45,12 @@
             {% for col_ref_num, data in Artifact.get_all(type_).items() %}
             {% set artifact = Artifact(data) %}
               <tr>
+                  {% if session['user_id'] %}<td>{{ artifact.col_ref_num }}</td>{% endif %}
                   <td>{{ artifact.name }}</td>
                   <td><span class="badge text-bg-light">{{ Artifact.types(artifact.type_) }}</span></td>
                   <td>{{ artifact.state_entity }}</td>
                   <td>{% if artifact["replica"] == "1" %}<span class="badge text-bg-danger"><i class="bi bi-shield-exclamation"></i></span>{% else %}{% endif %} {{ Artifact.yes_no(artifact["replica"]) }}</td>
-                  <td>{% if artifact["public"] == "1" %}<i class="bi bi-check-circle"></i>{% else %}<i class="bi bi-x-circle"></i> <i class="bi bi-incognito"></i>{% endif %} {{ Artifact.yes_no(artifact["public"]) }}</td>
+                  {% if session['user_id'] %}<td>{% if artifact["public"] == "1" %}<i class="bi bi-check-circle"></i>{% else %}<i class="bi bi-x-circle"></i> <i class="bi bi-incognito"></i>{% endif %} {{ Artifact.yes_no(artifact["public"]) }}</td>{% endif %}
                   <td><a class="btn btn-outline-primary" href="{{ url_for('main_page_module.artifacts_view', col_ref_num=artifact.col_ref_num) }}" role="button">Preglej</a></td>
               </tr>
             {% endfor %}
